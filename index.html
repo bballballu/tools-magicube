@@ -911,6 +911,16 @@ body::before {
 .result-card.error .result-placeholder-icon::after { content: ' 失败'; }
 .result-card.error .result-placeholder-text { color: var(--coral-deep); }
 
+.retry-btn {
+  margin-top: 10px; padding: 6px 20px; border: none; border-radius: 20px;
+  background: var(--coral); color: white; font-size: 13px;
+  font-family: 'ZCOOL KuaiLe', cursive; cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.retry-btn:hover { background: var(--coral-deep); transform: scale(1.05); }
+.retry-btn:active { transform: scale(0.97); }
+.retry-btn.loading { opacity: 0.6; pointer-events: none; }
+
 /* Toast */
 .toast {
   position: fixed; bottom: 32px; left: 50%;
@@ -1456,10 +1466,18 @@ function goToResults() {
         pathRec.error = err.message;
 
         card.classList.add('error');
+        card._retryTask = { prompt: task.prompt, useImage: task.useImage, imageData: imageData, pathIndex: genRecord.paths.length, mode: 'gen' };
         const ph = card.querySelector('.result-placeholder');
         if (ph) {
           ph.querySelector('.result-placeholder-text').textContent = '\u751f\u6210\u5931\u8d25';
           ph.querySelector('.result-placeholder-hint').textContent = err.message;
+          if (!ph.querySelector('.retry-btn')) {
+            const btn = document.createElement('button');
+            btn.className = 'retry-btn';
+            btn.textContent = '\ud83d\udd04 \u91cd\u65b0\u751f\u6210';
+            btn.onclick = () => retryGenerate(card);
+            ph.appendChild(btn);
+          }
         }
         const sh = card.querySelector('.shimmer');
         if (sh) sh.style.display = 'none';
@@ -1476,6 +1494,64 @@ function goToResults() {
 function goBack() {
   document.getElementById('page-editor').classList.remove('hidden-left');
   document.getElementById('page-results').classList.add('hidden-right');
+}
+
+async function retryGenerate(card) {
+  const task = card._retryTask;
+  if (!task) return;
+
+  // Reset card to loading state
+  card.classList.remove('error', 'done');
+  const existImg = card.querySelector('.result-img');
+  if (existImg) existImg.remove();
+  const ph = card.querySelector('.result-placeholder');
+  if (ph) {
+    ph.style.display = '';
+    ph.querySelector('.result-placeholder-text').textContent = '\u91cd\u65b0\u751f\u6210\u4e2d...';
+    ph.querySelector('.result-placeholder-hint').textContent = '';
+    const retryBtn = ph.querySelector('.retry-btn');
+    if (retryBtn) retryBtn.classList.add('loading');
+  }
+  const sh = card.querySelector('.shimmer');
+  if (sh) sh.style.display = '';
+
+  try {
+    const t0 = Date.now();
+    const imgUrl = await generateImage(task.prompt, task.useImage ? task.imageData : null);
+
+    // Update record
+    const record = task.mode === 'relay' ? relayRecord : genRecord;
+    const arr = task.mode === 'relay' ? record.lanes : record.paths;
+    if (arr[task.pathIndex]) {
+      arr[task.pathIndex].status = 'success';
+      arr[task.pathIndex].imageData = imgUrl;
+      arr[task.pathIndex].duration_ms = Date.now() - t0;
+      delete arr[task.pathIndex].error;
+    }
+
+    const img = document.createElement('img');
+    img.className = 'result-img';
+    img.src = imgUrl;
+    card.appendChild(img);
+    card.classList.add('done');
+    delete card._retryTask;
+    showToast('\u91cd\u65b0\u751f\u6210\u6210\u529f');
+  } catch (err) {
+    card.classList.add('error');
+    if (ph) {
+      ph.querySelector('.result-placeholder-text').textContent = '\u751f\u6210\u5931\u8d25';
+      ph.querySelector('.result-placeholder-hint').textContent = err.message;
+      const retryBtn = ph.querySelector('.retry-btn');
+      if (retryBtn) retryBtn.classList.remove('loading');
+    }
+    if (sh) sh.style.display = 'none';
+
+    const record = task.mode === 'relay' ? relayRecord : genRecord;
+    const arr = task.mode === 'relay' ? record.lanes : record.paths;
+    if (arr[task.pathIndex]) {
+      arr[task.pathIndex].error = err.message;
+    }
+  }
 }
 
 // ---- Image to Text (GPT-4o via yunwu.ai) ----
@@ -2031,8 +2107,19 @@ async function relayGenerate() {
       laneRec.status = 'failed';
       laneRec.error = err.message;
       card.classList.add('error');
+      card._retryTask = { prompt: prompt, useImage: !!laneImage, imageData: laneImage, pathIndex: relayRecord.lanes.length, mode: 'relay' };
       const ph = card.querySelector('.result-placeholder');
-      if (ph) { ph.querySelector('.result-placeholder-text').textContent = '\u5931\u8d25'; ph.querySelector('.result-placeholder-hint').textContent = err.message; }
+      if (ph) {
+        ph.querySelector('.result-placeholder-text').textContent = '\u5931\u8d25';
+        ph.querySelector('.result-placeholder-hint').textContent = err.message;
+        if (!ph.querySelector('.retry-btn')) {
+          const btn = document.createElement('button');
+          btn.className = 'retry-btn';
+          btn.textContent = '\ud83d\udd04 \u91cd\u65b0\u751f\u6210';
+          btn.onclick = () => retryGenerate(card);
+          ph.appendChild(btn);
+        }
+      }
       const sh = card.querySelector('.shimmer'); if (sh) sh.style.display = 'none';
     }
     relayRecord.lanes.push(laneRec);
