@@ -1059,8 +1059,9 @@ body::before {
   #page-editor, #page-results, .relay-overlay, .float-deco, .toast { display: none !important; }
   #page-report { display: flex !important; position: static !important; }
   .report-header { display: none !important; }
-  .report-container { padding: 0; }
-  .report-frame { box-shadow: none; border-radius: 0; width: 100%; }
+  .report-container { padding: 0; height: 100vh; }
+  .report-frame { box-shadow: none; border-radius: 0; width: 100%; height: 100%; display: flex; flex-direction: column; }
+  .report-frame .rpt-paths { flex: 1; }
   body { overflow: visible; height: auto; }
   body::before { display: none; }
   /* Shrink to fit A4 one page */
