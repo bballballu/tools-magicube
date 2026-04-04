@@ -934,6 +934,137 @@ body::before {
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
+/* ===== PAGE 3: REPORT ===== */
+.report-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 28px; background: var(--warm-white);
+  border-bottom: 2px solid var(--peach-light); flex-shrink: 0;
+}
+.report-actions { display: flex; gap: 8px; margin-left: auto; }
+.report-print-btn {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white; border: none; border-radius: 20px;
+  padding: 8px 24px; font-size: 14px;
+  font-family: 'ZCOOL KuaiLe', cursive; cursor: pointer;
+  transition: all 0.25s; box-shadow: 0 3px 12px rgba(102, 126, 234, 0.3);
+  letter-spacing: 1px;
+}
+.report-print-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(102, 126, 234, 0.4); }
+.report-print-btn:active { transform: scale(0.97); }
+
+.report-container {
+  flex: 1; overflow: auto; padding: 24px; display: flex;
+  justify-content: center; align-items: flex-start;
+}
+
+.report-frame {
+  width: 1100px; background: #fff; border-radius: 24px;
+  overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  flex-shrink: 0;
+}
+
+.report-frame .rpt-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff; padding: 28px 40px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.report-frame .rpt-header h2 { font-size: 28px; font-weight: 700; letter-spacing: 2px; }
+.report-frame .rpt-header .rpt-name { color: #ffd700; font-size: 32px; }
+.report-frame .rpt-header .rpt-subtitle { font-size: 14px; opacity: 0.85; margin-top: 4px; }
+.report-frame .rpt-badge {
+  background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 12px; padding: 8px 20px; font-size: 13px;
+  text-align: center; line-height: 1.6;
+}
+
+.report-frame .rpt-paths {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0;
+}
+.report-frame .rpt-path {
+  padding: 24px 28px 28px; border-right: 1px solid #e8ecf1; position: relative;
+}
+.report-frame .rpt-path:last-child { border-right: none; }
+
+.rpt-path-label {
+  display: inline-block; padding: 4px 16px; border-radius: 20px;
+  font-size: 13px; font-weight: 600; margin-bottom: 16px;
+}
+.rpt-path-1 .rpt-path-label { background: #ebf5ff; color: #2b6cb0; }
+.rpt-path-2 .rpt-path-label { background: #fef3e2; color: #c05621; }
+.rpt-path-3 .rpt-path-label { background: #f0fff4; color: #276749; }
+
+.rpt-method-desc {
+  font-size: 13px; line-height: 1.8; color: #718096; text-align: center;
+  padding: 8px 12px; background: #f7fafc; border-radius: 8px; margin-bottom: 12px;
+}
+.rpt-method-desc strong { color: #2d3748; }
+
+.rpt-step { margin-bottom: 14px; }
+.rpt-step-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.rpt-step-icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.rpt-path-1 .rpt-step-icon { background: #ebf5ff; }
+.rpt-path-2 .rpt-step-icon { background: #fef3e2; }
+.rpt-path-3 .rpt-step-icon { background: #f0fff4; }
+.rpt-step-title { font-size: 13px; font-weight: 600; color: #4a5568; }
+
+.rpt-img-slot {
+  width: 100%; aspect-ratio: 4/3; border-radius: 12px;
+  border: 2px dashed #cbd5e0; display: flex; align-items: center;
+  justify-content: center; font-size: 13px; color: #a0aec0;
+  background: #f7fafc; margin-bottom: 10px; overflow: hidden;
+}
+.rpt-img-slot img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
+.rpt-img-slot.rpt-original { border-color: #a0aec0; aspect-ratio: 1/1; }
+.rpt-img-slot.rpt-result { border: 2px solid; aspect-ratio: 4/3; }
+.rpt-path-1 .rpt-img-slot.rpt-result { border-color: #63b3ed; }
+.rpt-path-2 .rpt-img-slot.rpt-result { border-color: #ed8936; }
+.rpt-path-3 .rpt-img-slot.rpt-result { border-color: #68d391; }
+
+.rpt-arrow { text-align: center; font-size: 20px; color: #a0aec0; margin: 6px 0; line-height: 1; }
+
+.rpt-bubble {
+  border-radius: 12px; padding: 12px 14px; font-size: 12px;
+  line-height: 1.7; margin-bottom: 10px;
+}
+.rpt-bubble-ai { background: #f7fafc; border: 1px solid #e2e8f0; color: #4a5568; }
+.rpt-bubble-child { background: #fef3e2; border: 1px solid #fbd38d; color: #744210; }
+.rpt-bubble-label { font-size: 11px; font-weight: 700; margin-bottom: 4px; display: block; }
+.rpt-bubble-ai .rpt-bubble-label { color: #667eea; }
+.rpt-bubble-child .rpt-bubble-label { color: #dd6b20; }
+.rpt-bubble-text { font-style: italic; }
+
+.rpt-result-label {
+  text-align: center; font-size: 15px; font-weight: 700;
+  margin-top: 8px; padding: 6px 0; border-radius: 8px;
+}
+.rpt-path-1 .rpt-result-label { color: #2b6cb0; background: #ebf5ff; }
+.rpt-path-2 .rpt-result-label { color: #c05621; background: #fef3e2; }
+.rpt-path-3 .rpt-result-label { color: #276749; background: #f0fff4; }
+
+.rpt-footer {
+  background: #f7fafc; border-top: 1px solid #e8ecf1;
+  padding: 16px 40px; display: flex;
+  justify-content: space-between; align-items: center;
+}
+.rpt-footer-question { font-size: 15px; font-weight: 600; color: #553c9a; }
+.rpt-footer-hint { font-size: 12px; color: #a0aec0; }
+
+@media print {
+  .page { position: static !important; transform: none !important; opacity: 1 !important; pointer-events: auto !important; }
+  #page-editor, #page-results, .relay-overlay, .float-deco, .toast { display: none !important; }
+  #page-report { display: flex !important; position: static !important; }
+  .report-header { display: none !important; }
+  .report-container { padding: 0; }
+  .report-frame { box-shadow: none; border-radius: 0; width: 100%; }
+  body { overflow: visible; height: auto; }
+  body::before { display: none; }
+  @page { size: A3 landscape; margin: 12mm; }
+}
+
 /* Floating deco */
 .float-deco {
   position: fixed; pointer-events: none; opacity: 0.05; font-size: 50px; z-index: -1;
@@ -1165,6 +1296,7 @@ style: </textarea>
     <div id="resultsActions" style="display:none; gap:8px; margin-left:auto;">
       <button class="download-all-btn" onclick="downloadAllPlain()">📦 一键下载</button>
       <button class="download-all-btn" onclick="downloadAll()">📦 一键下载（含描述）</button>
+      <button class="report-print-btn" onclick="goToReport()">📄 生成实验报告</button>
     </div>
   </div>
   <div class="results-grid">
@@ -1230,6 +1362,143 @@ style: </textarea>
     </div>
     <div class="relay-modal-footer">
       <button class="relay-gen-btn" onclick="relayGenerate()">去生成 ✨</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 3: REPORT ===== -->
+<div class="page hidden-right" id="page-report">
+  <div class="report-header">
+    <button class="back-btn" onclick="goBackToResults()">&larr; 返回结果</button>
+    <div class="results-title">AI魔法实验报告</div>
+    <div class="report-actions">
+      <button class="report-print-btn" onclick="printReport()">🖨️ 打印 / 保存PDF</button>
+    </div>
+  </div>
+  <div class="report-container">
+    <div class="report-frame" id="reportFrame">
+
+      <div class="rpt-header">
+        <div>
+          <h2>🔮 <span class="rpt-name" id="rptName">小明</span> 的AI魔法实验报告</h2>
+          <div class="rpt-subtitle">AI学徒用三种不同的魔法配方，为你的画施了魔法</div>
+        </div>
+        <div class="rpt-badge" id="rptBadge">
+          🏫 北京传媒附小<br>
+          📅 2026年4月
+        </div>
+      </div>
+
+      <div class="rpt-paths">
+
+        <!-- 路径一：风格转绘 -->
+        <div class="rpt-path rpt-path-1">
+          <span class="rpt-path-label">魔法A — 换风格</span>
+          <div class="rpt-method-desc">AI<strong>直接看着</strong>你的画<br>给它换了一个风格</div>
+          <div class="rpt-step">
+            <div class="rpt-step-header">
+              <div class="rpt-step-icon">🎨</div>
+              <div class="rpt-step-title">你的原画</div>
+            </div>
+            <div class="rpt-img-slot rpt-original" id="rptOrig1">粘贴原画</div>
+          </div>
+          <div class="rpt-arrow">⬇</div>
+          <div class="rpt-step">
+            <div class="rpt-step-header">
+              <div class="rpt-step-icon">🤖</div>
+              <div class="rpt-step-title">AI直接看图 → 换风格</div>
+            </div>
+          </div>
+          <div class="rpt-arrow">⬇</div>
+          <div class="rpt-step">
+            <div class="rpt-step-header">
+              <div class="rpt-step-icon">✨</div>
+              <div class="rpt-step-title">变出来的画</div>
+            </div>
+            <div class="rpt-img-slot rpt-result" id="rptResult1">等待生成</div>
+          </div>
+          <div class="rpt-result-label">👆 这就是你的 2号卡</div>
+        </div>
+
+        <!-- 路径二：AI复刻 -->
+        <div class="rpt-path rpt-path-2">
+          <span class="rpt-path-label">魔法B — AI自己理解</span>
+          <div class="rpt-method-desc">AI<strong>用文字写下</strong>你画了什么<br>然后根据文字<strong>重新画</strong></div>
+          <div class="rpt-step">
+            <div class="rpt-step-header">
+              <div class="rpt-step-icon">🎨</div>
+              <div class="rpt-step-title">你的原画</div>
+            </div>
+            <div class="rpt-img-slot rpt-original" id="rptOrig2">粘贴原画</div>
+          </div>
+          <div class="rpt-arrow">⬇</div>
+          <div class="rpt-step">
+            <div class="rpt-step-header">
+              <div class="rpt-step-icon">🤖</div>
+              <div class="rpt-step-title">AI写下了这些文字</div>
+            </div>
+            <div class="rpt-bubble rpt-bubble-ai">
+              <span class="rpt-bubble-label">🤖 AI看到的：</span>
+              <span class="rpt-bubble-text" id="rptAiText2">"等待生成..."</span>
+            </div>
+          </div>
+          <div class="rpt-arrow">⬇</div>
+          <div class="rpt-step">
+            <div class="rpt-step-header">
+              <div class="rpt-step-icon">✨</div>
+              <div class="rpt-step-title">AI根据文字重新画的</div>
+            </div>
+            <div class="rpt-img-slot rpt-result" id="rptResult2">等待生成</div>
+          </div>
+          <div class="rpt-result-label">👆 这就是你的 3号卡</div>
+        </div>
+
+        <!-- 路径三：故事注入 -->
+        <div class="rpt-path rpt-path-3">
+          <span class="rpt-path-label">魔法C — 听了你的故事</span>
+          <div class="rpt-method-desc">AI用文字写下你画了什么<br>然后<strong>还听了你讲的故事</strong><br>最后一起重新画</div>
+          <div class="rpt-step">
+            <div class="rpt-step-header">
+              <div class="rpt-step-icon">🎨</div>
+              <div class="rpt-step-title">你的原画</div>
+            </div>
+            <div class="rpt-img-slot rpt-original" id="rptOrig3">粘贴原画</div>
+          </div>
+          <div class="rpt-arrow">⬇</div>
+          <div class="rpt-step">
+            <div class="rpt-step-header">
+              <div class="rpt-step-icon">🤖</div>
+              <div class="rpt-step-title">AI写下的 + 你的故事</div>
+            </div>
+            <div class="rpt-bubble rpt-bubble-ai">
+              <span class="rpt-bubble-label">🤖 AI看到的：</span>
+              <span class="rpt-bubble-text" id="rptAiText3">"等待生成..."</span>
+            </div>
+            <div class="rpt-bubble rpt-bubble-child">
+              <span class="rpt-bubble-label">💬 你说的故事：</span>
+              <span class="rpt-bubble-text" id="rptChildText3">"等待输入..."</span>
+            </div>
+          </div>
+          <div class="rpt-arrow">⬇</div>
+          <div class="rpt-step">
+            <div class="rpt-step-header">
+              <div class="rpt-step-icon">✨</div>
+              <div class="rpt-step-title">AI听了故事后画的</div>
+            </div>
+            <div class="rpt-img-slot rpt-result" id="rptResult3">等待生成</div>
+          </div>
+          <div class="rpt-result-label">👆 这就是你的 4号卡</div>
+        </div>
+
+      </div>
+
+      <div class="rpt-footer">
+        <div class="rpt-footer-question">
+          🤔 想一想：AI什么时候画得最像你想要的？是因为AI变聪明了，还是因为你喂了它故事？
+        </div>
+        <div class="rpt-footer-hint">AI魔方 · 媒介素养教育 · 中国传媒大学</div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -2135,6 +2404,80 @@ function showToast(msg) {
   toast.textContent = msg;
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+// ---- Report page ----
+function goToReport() {
+  const record = relayRecord || genRecord;
+  if (!record) return showToast('没有生成记录');
+
+  const fileId = record.fileId || 'untitled';
+  document.getElementById('rptName').textContent = fileId;
+
+  const now = new Date();
+  const dateStr = now.getFullYear() + '年' + (now.getMonth() + 1) + '月';
+  document.getElementById('rptBadge').innerHTML = '🏫 北京传媒附小<br>📅 ' + dateStr;
+
+  // Helper: set image in slot
+  function setSlotImage(slotId, src) {
+    const slot = document.getElementById(slotId);
+    slot.innerHTML = '';
+    if (src) {
+      const img = document.createElement('img');
+      img.src = src;
+      slot.appendChild(img);
+    } else {
+      slot.textContent = '暂无图片';
+    }
+  }
+
+  // Original image in all 3 columns
+  const origSrc = record.images ? record.images.original : record.original;
+  setSlotImage('rptOrig1', origSrc);
+  setSlotImage('rptOrig2', origSrc);
+  setSlotImage('rptOrig3', origSrc);
+
+  if (relayRecord) {
+    // Relay mode: use lane data
+    const lanes = relayRecord.lanes || [];
+    setSlotImage('rptResult1', lanes[0] ? lanes[0].imageData : null);
+    setSlotImage('rptResult2', lanes[1] ? lanes[1].imageData : null);
+    setSlotImage('rptResult3', lanes[2] ? lanes[2].imageData : null);
+    document.getElementById('rptAiText2').textContent = '"(中转台模式)"';
+    document.getElementById('rptAiText3').textContent = '"(中转台模式)"';
+    document.getElementById('rptChildText3').textContent = '"(中转台模式)"';
+  } else {
+    // Normal gen mode
+    const paths = genRecord.paths || [];
+    setSlotImage('rptResult1', paths[0] ? paths[0].imageData : null);
+    setSlotImage('rptResult2', paths[1] ? paths[1].imageData : null);
+    setSlotImage('rptResult3', paths[2] ? paths[2].imageData : null);
+
+    // AI description for path 2
+    const p2Text = genRecord.p2_i2t_result || '(未生成描述)';
+    document.getElementById('rptAiText2').textContent = '"' + p2Text + '"';
+
+    // AI description for path 3
+    const p3Text = genRecord.p3_i2t_result || '(未生成描述)';
+    document.getElementById('rptAiText3').textContent = '"' + p3Text + '"';
+
+    // Child's story
+    const intent = genRecord.intent || '(未填写故事)';
+    document.getElementById('rptChildText3').textContent = '"' + intent + '"';
+  }
+
+  // Navigate to report page
+  document.getElementById('page-results').classList.add('hidden-left');
+  document.getElementById('page-report').classList.remove('hidden-right');
+}
+
+function goBackToResults() {
+  document.getElementById('page-results').classList.remove('hidden-left');
+  document.getElementById('page-report').classList.add('hidden-right');
+}
+
+function printReport() {
+  window.print();
 }
 
 // ---- Init ----
