@@ -1477,28 +1477,17 @@ style: </textarea>
           <div class="rpt-result-label">👆 这就是你的 3号卡</div>
         </div>
 
-        <!-- 路径三：故事注入 -->
+        <!-- 路径三：图+儿童故事→AI→文本→生图 -->
         <div class="rpt-path rpt-path-3">
           <span class="rpt-path-label">魔法C — 听了你的故事</span>
-          <div class="rpt-method-desc">AI用文字写下你画了什么<br>然后<strong>还听了你讲的故事</strong><br>最后一起重新画</div>
+          <div class="rpt-method-desc">你的画 + 你讲的故事<br>一起告诉AI<br>AI写成文字后<strong>重新画</strong></div>
           <div class="rpt-step">
             <div class="rpt-step-header">
               <div class="rpt-step-icon">🎨</div>
               <div class="rpt-step-title">你的原画</div>
             </div>
             <div class="rpt-img-slot rpt-original" id="rptOrig3">粘贴原画</div>
-          </div>
-          <div class="rpt-arrow">⬇</div>
-          <div class="rpt-step">
-            <div class="rpt-step-header">
-              <div class="rpt-step-icon">🤖</div>
-              <div class="rpt-step-title">AI写下的 + 你的故事</div>
-            </div>
-            <div class="rpt-bubble rpt-bubble-ai">
-              <span class="rpt-bubble-label">🤖 AI看到的：</span>
-              <span class="rpt-bubble-text" id="rptAiText3">"等待生成..."</span>
-            </div>
-            <div class="rpt-bubble rpt-bubble-child">
+            <div class="rpt-bubble rpt-bubble-child" style="margin-top:4px">
               <span class="rpt-bubble-label">💬 你说的故事：</span>
               <span class="rpt-bubble-text" id="rptChildText3">"等待输入..."</span>
             </div>
@@ -1506,8 +1495,19 @@ style: </textarea>
           <div class="rpt-arrow">⬇</div>
           <div class="rpt-step">
             <div class="rpt-step-header">
+              <div class="rpt-step-icon">🤖</div>
+              <div class="rpt-step-title">AI结合画和故事写下的文字</div>
+            </div>
+            <div class="rpt-bubble rpt-bubble-ai">
+              <span class="rpt-bubble-label">🤖 AI理解后写的：</span>
+              <span class="rpt-bubble-text" id="rptAiText3">"等待生成..."</span>
+            </div>
+          </div>
+          <div class="rpt-arrow">⬇</div>
+          <div class="rpt-step">
+            <div class="rpt-step-header">
               <div class="rpt-step-icon">✨</div>
-              <div class="rpt-step-title">AI听了故事后画的</div>
+              <div class="rpt-step-title">AI根据文字重新画的</div>
             </div>
             <div class="rpt-img-slot rpt-result" id="rptResult3">等待生成</div>
           </div>
@@ -1588,6 +1588,33 @@ function extractEnglish(text) {
     // Keep line if Chinese chars are less than 30% of content
     return total > 0 && (cjk / total) < 0.3;
   }).join('\n').trim();
+}
+
+// Extract Chinese-only lines for report display, clean up formatting
+function extractChineseForReport(text) {
+  if (!text) return '';
+  return text.split('\n')
+    .map(line => {
+      let t = line.trim();
+      // Remove markdown headers and bold markers
+      t = t.replace(/^#{1,6}\s*/, '');
+      t = t.replace(/\*{1,3}/g, '');
+      // Remove common labels like "中文提示词：", "Chinese:", "English:", "英文提示词："
+      t = t.replace(/^(中文|英文|Chinese|English)\s*(提示词|[Pp]rompt)\s*[:：]\s*/i, '');
+      // Remove list markers
+      t = t.replace(/^[-–—•]\s*/, '');
+      return t.trim();
+    })
+    .filter(line => {
+      if (!line) return false;
+      // Count Chinese characters vs total non-space characters
+      const cjk = (line.match(/[\u4e00-\u9fff\u3000-\u303f\uff00-\uffef\u3400-\u4dbf]/g) || []).length;
+      const total = line.replace(/\s/g, '').length;
+      // Keep line if Chinese chars are at least 30% of content (opposite of extractEnglish)
+      return total > 0 && (cjk / total) >= 0.3;
+    })
+    .join('\n')
+    .trim();
 }
 
 function updatePreviews() {
@@ -2477,12 +2504,14 @@ function goToReport() {
     setSlotImage('rptResult2', paths[1] ? paths[1].imageData : null);
     setSlotImage('rptResult3', paths[2] ? paths[2].imageData : null);
 
-    // AI description for path 2
-    const p2Text = genRecord.p2_i2t_result || '(未生成描述)';
+    // AI description for path 2 (extract Chinese text only, clean formatting)
+    const p2Raw = genRecord.p2_i2t_result || '';
+    const p2Text = extractChineseForReport(p2Raw) || p2Raw || '(未生成描述)';
     document.getElementById('rptAiText2').textContent = '"' + p2Text + '"';
 
-    // AI description for path 3
-    const p3Text = genRecord.p3_i2t_result || '(未生成描述)';
+    // AI description for path 3 (extract Chinese text only, clean formatting)
+    const p3Raw = genRecord.p3_i2t_result || '';
+    const p3Text = extractChineseForReport(p3Raw) || p3Raw || '(未生成描述)';
     document.getElementById('rptAiText3').textContent = '"' + p3Text + '"';
 
     // Child's story
